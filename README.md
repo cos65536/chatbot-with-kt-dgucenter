@@ -50,7 +50,7 @@
         <a href="https://github.com/LxNx-Hn">@LxNx-Hn</a>
       </td>
       <td align="center" width="200px">
-        <img src="./ops/images/team/이세용.png" width="120px" alt="이세용"/><br>
+        <img src="./ops/images/team/이세용.jpg" width="120px" alt="이세용"/><br>
         <b>이세용</b><br>
         <sub>Dev_Main</sub><br>
         <a href="https://github.com/pla2n">@pla2n</a>
@@ -397,22 +397,54 @@ GitHub Actions 기반의 완전 자동화된 빌드 및 배포 시스템을 구�
 <summary><b>⚡ 이세용 - Dev_Main</b></summary>
 
 ### 담당 업무
-<!-- 작성필요 -->
+
+- **챗봇 인터페이스 개발**
+- **데이터 전처리 보조 및 API 연동**
+- **챗봇 최적화를 위한 프롬프트 엔지니어링**
+
 ### 주요 성과
-<!-- 작성필요 -->
+- **프롬포트 최적화**: 사용자가 정보를 쉽게 습득할 수 있도록 출력 프롬프트 최적화
+- **하이퍼 파라미터 튜닝**: 적절한 출력을 위한 모델 하이퍼 파라미터 미세조정
+- **할루시네이션 제거**: 모델이 전처리한 데이터가 아닌 스스로 생성한 데이터로 이상한 정보 출력하는 것을 방지
+- **데이터 전처리 보조**: 데이터 분류 및 전처리 및 챗봇에 데이터 API 연동
+- **챗봇 인터페이스 개발**: KT Mi:dm와 Gradio를 이용해 웹에서 작동하는 챗봇 개발 및 인터페이스 개발
+
 ### 사용 기술
-<!-- 작성필요 -->
+**Backend & AI**
+- `Python`, `FastAPI`, `PyTorch`
+- `Transformers`, `Sentence-Transformers`
+- `RAG (Retrieval-Augmented Generation)`
+
+**Frontend**
+- `JavaScript`
+
+**DevOps**
+- `Docker`
 </details>
 
 <details>
+
 <summary><b>🗄️ 이재홍 - DB_Main</b></summary>
 
-### 담당 업무
-<!-- 작성필요 -->
+- **데이터베이스 ERD 설계 및 테이블 구성**
+- **데이터 탐색(EDA) 및 확보 가능한 데이터 확정**
+- **데이터 정제 로직 개발** (중복, 이상치, 결측치 처리)
+- **RAG 모델 최적화를 위한 데이터셋 가공 및 프롬프트 테스트**
+- **FastAPI 기반 데이터 분석 API 서버 개발**
+- **프로젝트 데이터 관련 기술 문서 작성 및 관리**
+
 ### 주요 성과
-<!-- 작성필요 -->
+- **데이터 파이프라인 구축**: 공공 인허가 데이터의 수집, 정제, 검증 과정을 자동화하여 데이터 신뢰도 확보 및 처리 시간 단축
+- **RAG 모델 성능 향상**: 고품질 데이터셋 제공과 프롬프트 최적화를 통해 AI 모델의 검색 정확도 및 답변 품질 개선에 기여
+- **데이터 분석 API 개발**: FastAPI 기반 트렌드 분석 서비스 초기 모델 설계 및 구현
+
 ### 사용 기술
-<!-- 작성필요 -->
+**Data, Backend & AI**
+- `Python`, `Pandas`, `NumPy`, `FastAPI`, `RAG`
+
+**Tools & Version Control**
+- `Git`, `GitHub`, `Google Colab`, `CSV`
+
 </details>
 
 <details>
