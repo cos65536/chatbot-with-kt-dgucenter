@@ -1,0 +1,30 @@
+# .dockerignore
+
+# Node.js 관련
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Git 관련
+.git/
+.gitignore
+
+# Docker 관련
+Dockerfile
+.dockerignore
+
+# IDE/Editor 관련
+.vscode/
+.idea/
+*.iml
+
+# 기타 로컬 개발/빌드 관련
+build/ # 만약 React 앱 빌드 결과가 이미 로컬에 있다면
+dist/  # 위와 동일
+
+#Netlify 관련
+netlify/
+netlify.toml
+
+# 캐시 파일
+*.log

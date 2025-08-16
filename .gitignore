@@ -1,0 +1,90 @@
+.vscode
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+
+# Environment variables
+.env
+.env.local
+
+# API keys and sensitive config files
+**/config/api_keys.py
+**/config/secrets.py
+**/config/private_settings.py
+config.ini
+secrets.json
+credentials.json
+*.key
+*.pem
+
+# Logs
+*.log
+logs/
+
+# Cache
+.cache
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# PyCharm (already covered in IDE section)
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# AI/ML models (대용량 파일)
+*.model
+*.bin
+*.h5
+*.pb
+*.ckpt
+*.pth
+*.pt
