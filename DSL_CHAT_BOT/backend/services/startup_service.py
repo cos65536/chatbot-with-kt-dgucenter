@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+import re
+from collections import Counter
 from models.embedding_model import embedding_instance
 from models.llm_model import llm_instance
 from utils.text_processor import text_processor
@@ -69,6 +71,167 @@ class StartupService:
                 self.stats_embeds = np.array([])
                 self.biz_embeds = np.array([])
 
+    def detect_main_sector(self, question):
+        """질문에서 가장 관련 높은 업종 1개만 추출"""
+        text_key = question.lower()
+        matched_sectors = []
+        
+        # 1. 동의어 기반 매칭
+        for sector, keywords in self.text_processor.SYNONYMS.items():
+            for keyword in keywords:
+                if keyword.lower() in text_key:
+                    matched_sectors.append(sector)
+        
+        # 2. 업종명 직접 매칭
+        for sector in self.text_processor.SYNONYMS.keys():
+            if sector.lower() in text_key:
+                matched_sectors.append(sector)
+        
+        # 3. 매칭된 업종이 있으면 가장 빈도 높은 것 선택
+        if matched_sectors:
+            sector_counter = Counter(matched_sectors)
+            return sector_counter.most_common(1)[0][0]
+        
+        return "기타"
+
+    def get_sector_statistics(self, sector):
+        """특정 업종의 모든 통계 데이터 추출 및 정렬"""
+        all_sector_stats = [
+            stat for stat in self.stats_corpus 
+            if f"[통계]" in stat and sector.lower() in stat.lower()
+        ]
+        
+        # 연도별 정렬 (2020 → 2025)
+        all_sector_stats_sorted = sorted(
+            all_sector_stats,
+            key=lambda x: int(re.search(r'(\d{4})년', x).group(1)) if re.search(r'(\d{4})년', x) else 0
+        )
+        
+        return all_sector_stats_sorted
+
+    def get_sector_businesses(self, sector, user_keywords):
+        """특정 업종의 사업장 데이터를 우선순위에 따라 선별"""
+        # 해당 업종의 사업장 데이터
+        biz_examples = [
+            biz for biz in self.biz_corpus 
+            if f"[사업장]" in biz and sector.lower() in biz.lower()
+        ]
+        
+        # 사용자 키워드가 포함된 사업장 우선 선택
+        keyword_matches = []
+        other_matches = []
+        
+        for biz in biz_examples:
+            # 사업장 이름 추출
+            name_match = re.search(r'\[사업장\] ([^\(]+)', biz)
+            name = name_match.group(1).strip() if name_match else ""
+            
+            # 상태 정보 추출
+            status = ""
+            if "영업" in biz:
+                status = "영업"
+            elif "폐업" in biz:
+                status = "폐업"
+            elif "취소" in biz:
+                status = "취소"
+            else:
+                status_match = re.search(r'\([^,]+,\s*([^\)]+)\)', biz)
+                if status_match:
+                    status = status_match.group(1).strip()
+            
+            # 키워드 매칭
+            matched = False
+            for kw in user_keywords:
+                if kw.lower() in name.lower():
+                    matched = True
+                    break
+            
+            if matched:
+                keyword_matches.append((name, status))
+            else:
+                other_matches.append((name, status))
+        
+        # 영업/폐업 상태별 필터링
+        open_keyword = [b for b in keyword_matches if "영업" in b[1]]
+        open_others = [b for b in other_matches if "영업" in b[1]]
+        closed_keyword = [b for b in keyword_matches if "폐업" in b[1]]
+        closed_others = [b for b in other_matches if "폐업" in b[1]]
+        
+        # 3개 우선 선택: 키워드 영업 > 일반 영업 > 키워드 폐업 > 일반 폐업
+        selected = []
+        
+        selected.extend(open_keyword[:min(3, len(open_keyword))])
+        
+        if len(selected) < 3:
+            needed = 3 - len(selected)
+            selected.extend(open_others[:min(needed, len(open_others))])
+        
+        if len(selected) < 3:
+            needed = 3 - len(selected)
+            selected.extend(closed_keyword[:min(needed, len(closed_keyword))])
+        
+        if len(selected) < 3:
+            needed = 3 - len(selected)
+            selected.extend(closed_others[:min(needed, len(closed_others))])
+        
+        return selected, len(biz_examples)
+
+    def analyze_question(self, question):
+        """질문 종합 분석 (코랩의 inspect_question 로직)"""
+        # 주 업종 감지
+        main_sector = self.detect_main_sector(question)
+        
+        # 키워드 정보
+        sector_keywords = self.text_processor.SYNONYMS.get(main_sector, [])
+        
+        # 사용자 질문에서 직접 언급된 키워드 추출
+        user_keywords = []
+        question_lower = question.lower()
+        for keyword in sector_keywords + [main_sector]:
+            if re.search(rf'\b{re.escape(keyword.lower())}\b', question_lower):
+                user_keywords.append(keyword)
+        
+        # 해당 업종 통계 데이터
+        statistics = self.get_sector_statistics(main_sector)
+        
+        # 해당 업종 사업장 사례
+        business_examples, total_businesses = self.get_sector_businesses(main_sector, user_keywords)
+        
+        return {
+            "sector": main_sector,
+            "keywords": sector_keywords,
+            "user_keywords": user_keywords,
+            "statistics": statistics,
+            "business_examples": business_examples,
+            "total_businesses": total_businesses
+        }
+
+    def enhanced_search_context(self, question):
+        """업종 분석 기반 향상된 컨텍스트 검색"""
+        # 기본 임베딩 검색
+        basic_contexts = self.search_context(question, topk_stats=5, topk_biz=3)
+        
+        # 질문 분석
+        analysis = self.analyze_question(question)
+        
+        # 분석된 업종의 모든 통계 데이터 추가
+        sector_stats = analysis["statistics"]
+        
+        # 중복 제거하면서 통합
+        all_contexts = []
+        
+        # 1. 업종별 통계 데이터 우선 추가
+        for stat in sector_stats[:3]:  # 최근 3년 데이터만
+            if stat not in all_contexts:
+                all_contexts.append(stat)
+        
+        # 2. 기본 임베딩 검색 결과 추가 (중복 제거)
+        for context in basic_contexts:
+            if context not in all_contexts:
+                all_contexts.append(context)
+        
+        return all_contexts[:8]  # 최대 8개로 제한
+
     def search_context(self, query, topk_stats=5, topk_biz=3):
         """통계 데이터와 사업장 데이터를 별도로 검색"""
         q_emb = self.embedder.encode(query, convert_to_numpy=True)
@@ -90,8 +253,10 @@ class StartupService:
         return stats_results + biz_results
 
     def llm_answer_with_rag(self, question, chat_history=None):
-        """창업 상담 (실제 데이터 수치 정확히 제공)"""
-        contexts = self.search_context(question)
+        """창업 상담 (실제 데이터 수치 정확히 제공) - 향상된 검색 적용"""
+        # 향상된 컨텍스트 검색 사용
+        contexts = self.enhanced_search_context(question)
+        
         if not contexts:
             return """안녕하세요! 대구 동성로 창업 지원 챗봇입니다.
                     죄송하지만 질문과 관련된 자료를 찾지 못했습니다.
