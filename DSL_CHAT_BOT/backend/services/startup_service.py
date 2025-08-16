@@ -306,3 +306,69 @@ class StartupService:
 
 # 전역 인스턴스
 startup_service = StartupService()
+#텍스트 프로세서에서 코드 주석대로 수정하면 이렇게, 리포트를 넘기는거도 만들어놨습니당
+
+# def llm_answer_with_rag(self, question, chat_history=None):
+#     """창업 상담 (코랩 스타일 리포트 + 기존 프롬프트 유지)"""
+#     # 1. 컨텍스트 검색
+#     contexts = self.enhanced_search_context(question)
+#     if not contexts:
+#         return """안녕하세요! 대구 동성로 창업 지원 챗봇입니다.
+#                 죄송하지만 질문과 관련된 자료를 찾지 못했습니다.
+#                 더 구체적인 키워드로 다시 질문해주세요.
+#                 예시: "동성로 카페 창업률은?", "치킨집 폐업률 통계는?"
+#                 """
+    
+#     # 2. 코랩 스타일 리포트 생성
+#     analysis = self.analyze_question(question)
+#     report = [
+#         f"✅ 주요 업종: {analysis['sector']}",
+#         f"🔑 관련 키워드: {', '.join(analysis['keywords'])}",
+#         "📊 최근 3년 통계:",
+#         *[f"- {stat.split(':')[1].strip()}" for stat in analysis['statistics'][:3]],
+#         "🏢 대표 사업장:",
+#         *[f"- {name} ({status})" for name, status in analysis['business_examples'][:3]]
+#     ]
+
+#     # 3. 프롬프트 구성 (기존 구조 100% 보존)
+#     prompt = (
+#         "[분석 리포트]\n"
+#         f"{chr(10).join(report)}\n\n"
+        
+#         "현재 시점: 2025년 8월\n"
+#         "당신은 대구 동성로 창업 통계 전문가입니다.\n\n"
+
+#         "[핵심 원칙]\n"
+#         "✅ 데이터 수치 정확히 제시\n"
+#         "서울등, 동성로외 지역은 답변하지 않음\n"
+#         "❌ 데이터에 없는 정보 추측 금지, 찾을수없는 데이터는 데이터가 없다고 솔직하게 말할것\n\n"
+#         "통계 데이터는 2023년 부터 2025년까지 모두 반영되어야 합니다.\n\n"
+#         "절대 임의로 데이터를 생성하지 않을것\n"
+#         "[답변 구조]\n" 
+#         "1. 핵심 통계: 창업률, 폐업률, 생존율, 대표사업장 데이터에 기반한 요약정보 제공\n" 
+#         "2. 창업 실용 조언\n"
+#         "   - 통계 데이터 기반 객관적 분석 및 현실적 조언\n"
+#         "   - 업종별 주의사항 (데이터 근거)\n\n"
+
+#         f"데이터:\n{chr(10).join(contexts)}\n"
+#         f"질문: {question}\n"
+#         f"답변:"
+#     )
+
+#     # 4. LLM 호출
+#     messages = [
+#         {
+#             "role": "system", 
+#             "content": "창업 통계 전문가. 데이터에 있는 정확한 수치는 그대로 제시. "
+#                     "없는 데이터는 절대 생성하지 않을것. "
+#                     "창업률/폐업률/생존율/사업장 수 등 실제 통계 정확히 제공."
+#         },
+#         {"role": "user", "content": prompt}
+#     ]
+
+#     return self.llm.generate_response(
+#         messages, 
+#         max_new_tokens=712,
+#         do_sample=False,
+#     )
+#    return response
