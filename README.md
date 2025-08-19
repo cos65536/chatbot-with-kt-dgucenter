@@ -157,11 +157,6 @@ chatbot-with-kt-dgucenter/
   <img src="./ops\images\Screenshot\데스크탑 라이트.png", alt="데탑" width="800"/>
 </div>
 
-- **챗봇 소개 영상**
-<div align="center">
-  <img src="./ops\images\Screenshot\Video.gif", alt="데탑" width="800"/>
-</div>
-
 - **창업 질문 답변 예시**
 <div align="center">
   <img src="./ops\images\Screenshot\예시_창업.png", alt="답변예시_창업" width="800"/>
@@ -452,7 +447,6 @@ GitHub Actions 기반의 완전 자동화된 빌드 및 배포 시스템을 구�
 <summary><b>🗄️ 이재홍 - DB_Main</b></summary>
 
 ### 담당 업무
-- **데이터베이스 ERD 설계 및 테이블 구성**
 - **데이터 탐색(EDA) 및 확보 가능한 데이터 확정**
 - **데이터 정제 로직 개발** (중복, 이상치, 결측치 처리)
 - **RAG 모델 최적화를 위한 데이터셋 가공 및 프롬프트 테스트**
