@@ -271,7 +271,7 @@ class StartupService:
             match = re.match(r'\[통계\]\s*(\d{4})년.*?:\s*(.+)', stat)
             if match:
                 year, rest = match.groups()
-                stats_with_year.append((int(year), f"**{year}년**: {rest.strip()}"))
+                stats_with_year.append((int(year), f"{year}년 : {rest.strip()}"))
 
         # 연도 오름차순 정렬
         stats_with_year.sort(key=lambda x: x[0])
