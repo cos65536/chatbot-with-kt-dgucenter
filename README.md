@@ -38,7 +38,7 @@
     <tr>
       <td align="center" width="200px">
         <!-- 팀원 사진 추가 -->
-        <img src="./ops/images/team/윤서진.png" width="120px" alt="윤서진"/><br>
+        <img src="./ops/images/team/윤서진.jpg" width="120px" alt="윤서진"/><br>
         <b>윤서진</b><br>
         <sub>ProductManager</sub><br>
         <a href="https://github.com/0azzpll">@0azzpll</a>
@@ -366,7 +366,6 @@ GitHub Actions 기반의 완전 자동화된 빌드 및 배포 시스템을 구�
 - **성공적 최종 발표**: 프로젝트의 진행 과정과 주요 성과를 체계적으로 정리하여 워크샵에서 효과적으로 공유
 
 ### 사용 기술
-### 사용 기술
 
 **Project Management & Collaboration**
 - `Notion`, `Git` (프로젝트 일정/이슈 관리)
@@ -452,6 +451,7 @@ GitHub Actions 기반의 완전 자동화된 빌드 및 배포 시스템을 구�
 
 <summary><b>🗄️ 이재홍 - DB_Main</b></summary>
 
+### 담당 업무
 - **데이터베이스 ERD 설계 및 테이블 구성**
 - **데이터 탐색(EDA) 및 확보 가능한 데이터 확정**
 - **데이터 정제 로직 개발** (중복, 이상치, 결측치 처리)
@@ -477,11 +477,26 @@ GitHub Actions 기반의 완전 자동화된 빌드 및 배포 시스템을 구�
 <summary><b>🔗 황용선 - Linker</b></summary>
 
 ### 담당 업무
-<!-- 작성필요 -->
+- **시스템 연동 및 데이터 파이프라인 설계**
+- **분류 모델 성능 개선 및 운영**
+- **데이터 구축 및 정제**
+- **프롬프트 엔지니어링**
+
 ### 주요 성과
-<!-- 작성필요 -->
+- **하이브리드 분류 시스템 구축**: 규칙 기반 필터링과 LLM을 결합해 효율성과 정확도를 동시에 개선
+- **모델 견고성 및 안정성 강화**: 비정상 입력 선차단(D-Gate 로직 도입) 및 C↔D 혼동 케이스 차단으로 오분류 감소
+- **데이터 품질 제고**: 오답/경계 샘플셋 기반 프롬프트·규칙 반복 개선 체계화
+
 ### 사용 기술
-<!-- 작성필요 -->
+**AI & Data**
+- `Python`, `Pandas`, `Hugging Face Transformers`, `PyTorch`, `tqdm`
+
+**Data Processing**
+- `Regex`, `CSV`
+
+**협업/도구**
+- `Git`, `GitHub`, `Google Colab`
+
 </details>
 
 ---
