@@ -38,13 +38,12 @@ class TextProcessor:
         업종 = str(row['업종구분'])
         연도 = str(int(row['연도']))
         syns = self.SYNONYMS.get(업종, [])
-        syn_str = f"{업종}({'/'.join(syns)})" if syns else 업종 #이거 주석처리하고 아래 syn_str들어가는거 업종으로 바꾸면 출력변화
         
         # 핵심 통계만 추출
         safe = lambda x: str(x) if pd.notnull(x) and str(x).strip() != '' else '정보없음'
         
         return (
-            f"[통계] {연도}년 {syn_str}: "
+            f"[통계] {연도}년 {업종}: "
             f"창업률={safe(row.get('창업률(%)'))}%, "
             f"폐업률={safe(row.get('폐업률(%)'))}%, "
             f"1년생존율={safe(row.get('1년생존율(%)'))}%, "
@@ -60,10 +59,8 @@ class TextProcessor:
             상호명 = str(row.iloc[5])
             
             # BIZ_SYNONYMS 제거 및 일반 동의어(SYNONYMS)만 사용
-            syns = self.SYNONYMS.get(업종명, [])
-            syn_str = f"{업종명}({'/'.join(syns)})" if syns else 업종명 #이거도 지우고, 아래에꺼 업종명으로 바꾸면 출력이 달라짐 -> 동의어 리스트 유저에게 노출안됨
-            
-            return f"[사업장] {상호명} ({syn_str}, {상태})"
+            syns = self.SYNONYMS.get(업종명, [])   
+            return f"[사업장] {상호명} ({업종명}, {상태})"
         except Exception as e:
             return f"[사업장] 오류: {str(e)}"
 

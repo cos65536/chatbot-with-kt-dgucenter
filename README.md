@@ -56,7 +56,7 @@
         <a href="https://github.com/pla2n">@pla2n</a>
       </td>
       <td align="center" width="200px">
-        <img src="./ops/images/team/이재홍.png" width="120px" alt="이재홍"/><br>
+        <img src="./ops/images/team/이재홍.JPG" width="120px" alt="이재홍"/><br>
         <b>이재홍</b><br>
         <sub>DB_Main</sub><br>
         <a href="https://github.com/cos65536">@cos65536</a>
@@ -376,7 +376,6 @@ GitHub Actions 기반의 완전 자동화된 빌드 및 배포 시스템을 구�
 
 **Version Control**
 - `Git`, `GitHub` (프로젝트 산출물 관리 및 진행 현황 공유)
-
 
 </details>
 
