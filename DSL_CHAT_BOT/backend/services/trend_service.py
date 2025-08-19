@@ -17,15 +17,16 @@ class TrendService:
         self.api_url = "https://openapi.naver.com/v1/datalab/search"
 
     def _extract_keywords(self, question):
-        """질문에서 키워드 추출"""
-        extract_prompt = f"다음 질문에서 트렌드 분석할 키워드들을 쉼표로 구분해서 최대 3개 추출해줘: {question}"
+        """질문에서 키워드 1개 추출"""
+        extract_prompt = f"다음 질문에서 트렌드 분석할 대표적인 키워드 하나만 추출해줘: {question}"
         messages = [
             {"role": "system", "content": "키워드만 간단히 추출해줘."},
             {"role": "user", "content": extract_prompt}
         ]
         response = self.llm.generate_response(messages, max_new_tokens=50, do_sample=False)
-        keywords = [k.strip() for k in response.split(',') if k.strip()]
-        return keywords[:3]
+        # 쉼표로 분리하지 않고 첫 번째 키워드만 사용
+        keyword = response.split(',')[0].strip() if ',' in response else response.strip()
+        return [keyword]  # 리스트에 하나만 담아 반환
 
     def _fetch_trend_data(self, keywords):
         """네이버 데이터랩 API 호출"""
@@ -52,8 +53,10 @@ class TrendService:
     def _convert_to_text(self, keywords, trend_data):
         """트렌드 데이터를 텍스트로 변환"""
         texts = []
-        for i, result in enumerate(trend_data['results']):
-            keyword = keywords[i]
+        # 키워드 1개 -> results도 1개
+        if trend_data.get('results'):
+            result = trend_data['results'][0]
+            keyword = keywords[0]
             data_points = result.get('data', [])
             data_str = [f"{item['period']}:{item['ratio']}" for item in data_points]
             texts.append(f"{keyword} 검색량: {', '.join(data_str)}")
@@ -67,12 +70,8 @@ class TrendService:
         trend_data = self._fetch_trend_data(keywords)
         trend_texts = self._convert_to_text(keywords, trend_data)
         
-        # 임베딩 검색
-        q_emb = self.embedder.encode(question, convert_to_numpy=True)
-        trend_embeds = self.embedder.encode(trend_texts, convert_to_numpy=True)
-        sims = np.dot(trend_embeds, q_emb)
-        top_ids = sims.argsort()[-3:][::-1]
-        contexts = [trend_texts[i] for i in top_ids]
+        # 키워드가 1개이므로 trend_texts도 1개 -> 유사도 계산 불필요
+        contexts = trend_texts
         
         if not contexts:
             return "트렌드 데이터를 찾을 수 없어 정확한 분석이 어렵습니다. 다른 키워드로 다시 질문해 주세요!"
@@ -130,8 +129,6 @@ class TrendService:
         )
         
         return response
-
-
 
 # 전역 인스턴스
 trend_service = TrendService()
