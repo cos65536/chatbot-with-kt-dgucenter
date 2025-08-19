@@ -313,7 +313,7 @@ class StartupService:
         llm_advice = self.llm.generate_response(messages, max_new_tokens=512, do_sample=False)
 
         # 6. 최종 정형화 출력 합치기
-        output = "✅ 동성로 카페 창업 통계 분석 (2020-2025)\n\n"
+        output = "✅ 동성로 통계 분석 자료 (2020-2025)\n\n"
         output += "📊 핵심 통계\n\n" + "\n".join(f"- {line}" for line in stats_lines) + "\n\n"
         output += "🏢 현재 영업중인 대표사업장\n"
         output += "\n".join(biz_lines) + "\n\n"
